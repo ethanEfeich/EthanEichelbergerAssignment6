@@ -28,14 +28,15 @@ vertices = (
 
 def cube():
     # blue face
+    # glLoadIdentity()
     glBegin(GL_QUADS)
-    glColor3fv(blue)
+    glColor3fv(green)
     glVertex3fv(vertices[0])
     glVertex3fv(vertices[1])
     glVertex3fv(vertices[2])
     glVertex3fv(vertices[3])
     # green face
-    glColor3fv(green)
+    glColor3fv(blue)
     glVertex3fv(vertices[4])
     glVertex3fv(vertices[5])
     glVertex3fv(vertices[6])
@@ -58,7 +59,7 @@ def cube():
     glVertex3fv(vertices[3])
     glVertex3fv(vertices[7])
     glVertex3fv(vertices[4])
-    # # white
+    # white
     glColor3fv(white)
     glVertex3fv(vertices[1])
     glVertex3fv(vertices[2])
@@ -73,17 +74,7 @@ def main():
     display = (800, 600)
 
     pygame.display.set_mode(display, DOUBLEBUF|OPENGL)
-#User presses the r key, rotate to the right (clockwise) on the z axis
-#
-# User presses the l key, rotate to the left (counterclockwise) on the z axis
-#
-# User presses the u key, rotate the cube up (clockwise as if looking "down" the x axis from +x) on the x axis.
-#
-# User presses the d key, rotate the cube down (counterclockwise as if looking down the x axis from +x) on the x axis.
-#
-# User presses the s key, rotate (spin) the cube in a clockwise direction as if looking down the y axis from +y toward -y.
-#
-# User presses the a key, rotate (spin) the cube in a counterclockwise direction as if looking down the y axis from +y toward -y.
+
     up = 0
     down = 0
     left_z = 0
@@ -94,22 +85,22 @@ def main():
 
         if left_z:
             right_y, right_z, down, up = 0, 0, 0, 0
-            glRotatef(5, 0, 0, 1)
+            glRotatef(5, 0, 0, .5)
         if left_y:
             right, down, up = 0, 0, 0
-            glRotatef(5, 0, 1, 0)
+            glRotatef(5, 0, .5, 0)
         if right_z:
             left, down, up = 0, 0, 0
-            glRotatef(-5, 0, 0, 1)
+            glRotatef(-5, 0, 0, .5)
         if right_y:
             left, down, up = 0, 0, 0
-            glRotatef(-5, 0, 1, 0)
+            glRotatef(-5, 0, .5, 0)
         if up:
             left, down, right = 0, 0, 0
-            glRotatef(5, 1, 0, 0)
+            glRotatef(5, .5, 0, 0)
         if down:
             left, up, right = 0, 0, 0
-            glRotatef(-5, 1, 0, 0)
+            glRotatef(-5, .5, 0, 0)
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -136,7 +127,9 @@ def main():
                 right_z = 0
                 up = 0
                 down = 0
-        glClear(GL_COLOR_BUFFER_BIT)
+        glDepthFunc(GL_LESS)  # this is default
+        glEnable(GL_DEPTH_TEST)
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
         cube()
         pygame.display.flip()
         pygame.time.wait(10)
